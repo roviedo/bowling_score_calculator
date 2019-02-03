@@ -1,0 +1,27 @@
+.score-frames {
+    display: flex;
+    min-height: 50px;
+}
+
+.score-frame {
+    width: 10%;
+    border: 1px solid;
+}
+
+.turn-score {
+    display: flex;
+    height: 35%;
+}
+
+.first-turn {
+    width: 50%;
+}
+
+.second-turn {
+    width: 50%;
+}
+
+.frame-total {
+    font-size: 1.5rem;
+    height: 65%;
+}

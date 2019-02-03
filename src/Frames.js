@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Frame from './Frame';
+import ScoreBoard from './ScoreBoard';
+import './Frames.css';
 
 class Frames extends Component {
   constructor (props) {
@@ -57,7 +59,10 @@ class Frames extends Component {
     });
     return (
       <div>
-        { frames }
+        <div className='input-frames'>
+          { frames }
+        </div>
+        <ScoreBoard frames={this.state.frames} />
       </div>
     );
   }

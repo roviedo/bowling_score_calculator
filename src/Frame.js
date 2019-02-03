@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Frame.css';
 
 class Frame extends Component {
   handleFirstTurn = (e) => {
@@ -11,7 +12,7 @@ class Frame extends Component {
 
   render() {
     return (
-      <div>
+      <div className='input-frame'>
         <input value={this.props.frame[0]} onChange={ this.handleFirstTurn }/>
         <input value={this.props.frame[1]} onChange={ this.handleSecondTurn }/>
       </div>
