@@ -18,7 +18,8 @@ class Frames extends Component {
         ['', ''],
         ['', ''],
         ['', '']
-      ]
+      ],
+      framesTotals: ['', '', '', '', '', '', '' ,'', '', '']
     }
   }
 
@@ -34,7 +35,11 @@ class Frames extends Component {
       } else {
         frameValue = newValue
       }
-      frames[index] = [frameValue, frames[index][1]];
+      if (frameValue === 10) {
+        frames[index] = [frameValue, 0];
+      } else {
+        frames[index] = [frameValue, frames[index][1]];
+      }
     } else {
        if ((newValue + frames[index][0]) > 10) {
         frameValue = '';
@@ -44,9 +49,39 @@ class Frames extends Component {
       frames[index] = [frames[index][0], frameValue];
     }
 
+    const newFrameTotals = this.getFramesTotals();
     this.setState({
-      frames
+      frames,
+      framesTotals: newFrameTotals
     });
+  }
+
+  getFramesTotals() {
+    let framesTotals = this.state.framesTotals;
+    for (let index=0; index<this.state.frames.length; index++) {
+      const prevIndexTotal = index > 0 ? framesTotals[index-1] : 0;
+      if (this.state.frames[index][0] === 10) {
+        // check next two frames
+        if (this.state.frames[index+1][0] === 10) {
+            if (this.state.frames[index+2][0] === 10) {
+                framesTotals[index] = prevIndexTotal + 30;
+            } else if (this.state.frames[index+2][0] !== '' && (this.state.frames[index+2][0] < 10)) {
+                framesTotals[index] = prevIndexTotal + 20 + this.state.frames[index+2][0];
+            }
+        } else if (this.state.frames[index+1][0] !== '' && this.state.frames[index+1][1] !== '' && ((this.state.frames[index+1][0] + this.state.frames[index+1][1]) <= 10)) {
+            framesTotals[index] = prevIndexTotal + 10 + (this.state.frames[index+1][0] + this.state.frames[index+1][1]);
+        }
+      } else if ((this.state.frames[index][0] + this.state.frames[index][1]) === 10) {
+          if (this.state.frames[index+1][0] > 0) {
+            framesTotals[index] = prevIndexTotal + (this.state.frames[index][0] + this.state.frames[index][1] + this.state.frames[index+1][0]);
+          } else {
+              framesTotals[index] = '';
+          }
+      } else if (this.state.frames[index][0] !== '' && this.state.frames[index][1] !== '' && ((this.state.frames[index][0] + this.state.frames[index][1]) < 10)) {
+          framesTotals[index] = prevIndexTotal + (this.state.frames[index][0] + this.state.frames[index][1]);
+      }
+    }
+    return framesTotals;
   }
 
   render() {
@@ -62,7 +97,7 @@ class Frames extends Component {
         <div className='input-frames'>
           { frames }
         </div>
-        <ScoreBoard frames={this.state.frames} />
+        <ScoreBoard frames={this.state.frames} framesTotals={this.state.framesTotals} />
       </div>
     );
   }
