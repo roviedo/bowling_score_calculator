@@ -6,6 +6,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <div className="header-title">
+          Bolwing Score Calculator
+        </div>
+        <img className="header-image" src="../bowling_pins.png" />
         <Frames />
       </div>
     );
