@@ -9,7 +9,7 @@ class App extends Component {
         <div className="header-title">
           Bolwing Score Calculator
         </div>
-        <img className="header-image" src="../bowling_pins.png" />
+        <img className="header-image" src="../bowling_pins.png" alt="bowling pins"/>
         <Frames />
       </div>
     );

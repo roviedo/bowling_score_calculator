@@ -13,6 +13,7 @@
     height: 35%;
     background-color: #9984d2;
     color: #e6e607;
+    text-shadow: 2px 2px 4px #000;
 }
 
 .first-turn {
@@ -29,4 +30,5 @@
     background-color: #9984d2;
     opacity: 0.5;
     color: #FFF;
+    text-shadow: 2px 2px 4px #000;
 }

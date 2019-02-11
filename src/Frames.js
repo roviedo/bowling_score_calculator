@@ -17,7 +17,7 @@ class Frames extends Component {
         ['', ''],
         ['', ''],
         ['', ''],
-        ['', '']
+        ['', '', '']
       ],
       framesTotals: ['', '', '', '', '', '', '' ,'', '', '']
     }
@@ -35,18 +35,42 @@ class Frames extends Component {
       } else {
         frameValue = newValue
       }
-      if (frameValue === 10) {
+      if (index === 9) {
+        frames[index] = [frameValue, frames[index][1]];
+      } else if (frameValue === 10) {
         frames[index] = [frameValue, 0];
       } else {
         frames[index] = [frameValue, frames[index][1]];
       }
-    } else {
-       if ((newValue + frames[index][0]) > 10) {
-        frameValue = '';
+    } else if (turn === 'secondTurn') {
+      if (index === 9) {
+        if (frames[index][0] === 10 && newValue <= 10) {
+          frameValue = newValue;
+        } else if ((newValue + frames[index][0]) <= 10) {
+          frameValue = newValue;
+        } else {
+          frameValue = '';
+        }
+        frames[index] = [frames[index][0], frameValue, frames[index][2]];
       } else {
-        frameValue = newValue
+        if ((newValue + frames[index][0]) > 10) {
+          frameValue = '';
+        } else {
+          frameValue = newValue;
+        }
+        frames[index] = [frames[index][0], frameValue];
       }
-      frames[index] = [frames[index][0], frameValue];
+    } else if (turn === 'thirdTurn') {
+      if (newValue > 10) {
+        frameValue = '';
+      } else if ((frames[index][0] > 0 && frames[index][0] < 10) && (frames[index][1] > 0 && frames[index][1] < 10)) {
+        frameValue = newValue;
+      } else if ((frames[index][0] === 10) && (frames[index][1] === 10)) {
+        frameValue = newValue;
+      } else if ((frames[index][0] === 10) && (frames[index][1] > 0 && frames[index][1] < 10) && (frames[index][1] + newValue <=10)) {
+        frameValue = newValue;
+      }
+      frames[index] = [frames[index][0], frames[index][1], frameValue];
     }
 
     const newFrameTotals = this.getFramesTotals();
@@ -60,12 +84,23 @@ class Frames extends Component {
     let framesTotals = this.state.framesTotals;
     for (let index=0; index<this.state.frames.length; index++) {
       const prevIndexTotal = index > 0 ? framesTotals[index-1] : 0;
-      if (this.state.frames[index][0] === 10) {
+      if (index === 9) {
+        framesTotals[index] = prevIndexTotal + this.state.frames[index].filter((pins) => pins >= 0).reduce((total, num) => total + num, 0);
+        
+      } else if (index === 8) {
+        if (this.state.frames[index+1][0] === 10) {
+          if (this.state.frames[index+1][1] === 10) {
+            framesTotals[index] = prevIndexTotal + 30;
+          } else if (this.state.frames[index+1][1] !== '' && (this.state.frames[index+1][1] < 10)) {
+            framesTotals[index] = prevIndexTotal + 20 + this.state.frames[index+1][1];
+          }
+        }
+      } else if (this.state.frames[index][0] === 10) {
         // check next two frames
         if (this.state.frames[index+1][0] === 10) {
-            if (this.state.frames[index+2][0] === 10) {
+            if (index < 8 && this.state.frames[index+2][0] === 10) {
                 framesTotals[index] = prevIndexTotal + 30;
-            } else if (this.state.frames[index+2][0] !== '' && (this.state.frames[index+2][0] < 10)) {
+            } else if (index < 8 && this.state.frames[index+2][0] !== '' && (this.state.frames[index+2][0] < 10)) {
                 framesTotals[index] = prevIndexTotal + 20 + this.state.frames[index+2][0];
             }
         } else if (this.state.frames[index+1][0] !== '' && this.state.frames[index+1][1] !== '' && ((this.state.frames[index+1][0] + this.state.frames[index+1][1]) <= 10)) {
@@ -81,6 +116,7 @@ class Frames extends Component {
           framesTotals[index] = prevIndexTotal + (this.state.frames[index][0] + this.state.frames[index][1]);
       }
     }
+
     return framesTotals;
   }
 
