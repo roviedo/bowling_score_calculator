@@ -61,7 +61,7 @@ class Frames extends Component {
         frames[index] = [frames[index][0], frameValue];
       }
     } else if (turn === 'thirdTurn') {
-      if (newValue > 10) {
+      if (newValue > 10 || (frames[index][0] + frames[index][1] < 10)) {
         frameValue = '';
       } else if ((frames[index][0] > 0 && frames[index][0] < 10) && (frames[index][1] > 0 && frames[index][1] < 10)) {
         frameValue = newValue;
@@ -70,6 +70,7 @@ class Frames extends Component {
       } else if ((frames[index][0] === 10) && (frames[index][1] > 0 && frames[index][1] < 10) && (frames[index][1] + newValue <=10)) {
         frameValue = newValue;
       }
+
       frames[index] = [frames[index][0], frames[index][1], frameValue];
     }
 
@@ -85,23 +86,20 @@ class Frames extends Component {
     for (let index=0; index<this.state.frames.length; index++) {
       const prevIndexTotal = index > 0 ? framesTotals[index-1] : 0;
       if (index === 9) {
-        framesTotals[index] = prevIndexTotal + this.state.frames[index].filter((pins) => pins >= 0).reduce((total, num) => total + num, 0);
-        
-      } else if (index === 8) {
-        if (this.state.frames[index+1][0] === 10) {
-          if (this.state.frames[index+1][1] === 10) {
-            framesTotals[index] = prevIndexTotal + 30;
-          } else if (this.state.frames[index+1][1] !== '' && (this.state.frames[index+1][1] < 10)) {
-            framesTotals[index] = prevIndexTotal + 20 + this.state.frames[index+1][1];
-          }
-        }
+        framesTotals[index] = prevIndexTotal + this.state.frames[index].filter((pins) => pins !== '' && pins >= 0).reduce((total, num) => total + num, 0);
       } else if (this.state.frames[index][0] === 10) {
         // check next two frames
         if (this.state.frames[index+1][0] === 10) {
             if (index < 8 && this.state.frames[index+2][0] === 10) {
-                framesTotals[index] = prevIndexTotal + 30;
+              framesTotals[index] = prevIndexTotal + 30;
             } else if (index < 8 && this.state.frames[index+2][0] !== '' && (this.state.frames[index+2][0] < 10)) {
-                framesTotals[index] = prevIndexTotal + 20 + this.state.frames[index+2][0];
+              framesTotals[index] = prevIndexTotal + 20 + this.state.frames[index+2][0];
+            } else if (index === 8) {
+              if (this.state.frames[index+1][1] === 10) {
+                framesTotals[index] = prevIndexTotal + 30;
+              } else if (this.state.frames[index+1][1] !== '' && (this.state.frames[index+1][1] < 10)) {
+                framesTotals[index] = prevIndexTotal + 20 + this.state.frames[index+1][1];
+              }
             }
         } else if (this.state.frames[index+1][0] !== '' && this.state.frames[index+1][1] !== '' && ((this.state.frames[index+1][0] + this.state.frames[index+1][1]) <= 10)) {
             framesTotals[index] = prevIndexTotal + 10 + (this.state.frames[index+1][0] + this.state.frames[index+1][1]);
@@ -110,7 +108,7 @@ class Frames extends Component {
           if (this.state.frames[index+1][0] > 0) {
             framesTotals[index] = prevIndexTotal + (this.state.frames[index][0] + this.state.frames[index][1] + this.state.frames[index+1][0]);
           } else {
-              framesTotals[index] = '';
+            framesTotals[index] = '';
           }
       } else if (this.state.frames[index][0] !== '' && this.state.frames[index][1] !== '' && ((this.state.frames[index][0] + this.state.frames[index][1]) < 10)) {
           framesTotals[index] = prevIndexTotal + (this.state.frames[index][0] + this.state.frames[index][1]);

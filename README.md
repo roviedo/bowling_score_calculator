@@ -1,4 +1,4 @@
-#Bowling Score Calculator
+# Bowling Score Calculator
 
 ##### Bowling Score Calculator application using ReactJS
 ##### Instructions of how to keep score [Bowling Keeping Score](hhttps://www.bowl.com/Welcome/Welcome_Home/Keeping_Score/)

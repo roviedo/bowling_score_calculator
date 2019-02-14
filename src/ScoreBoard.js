@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import './ScoreBoard.css';
 
 class ScoreBoard extends Component {
-  getTurnScore (frameTurnScore) {
+  getTurnScore (frame, turn) {
     let turnScore;
-    if (frameTurnScore === 0) {
+    if (frame[turn] === 0) {
         turnScore = '-';
-    } else if (frameTurnScore === 10) {
+    } else if (frame[turn] === 10) {
         turnScore = 'X';
-    } else if (frameTurnScore > 0 && frameTurnScore < 10) {
-        turnScore = frameTurnScore;
+    } else if (turn === 1 && (frame[0] + frame[1] === 10)) {
+        turnScore = '/';
+    } else if (frame[turn] > 0 && frame[turn] < 10) {
+        turnScore = frame[turn];
     }
 
     return turnScore;
@@ -24,14 +26,14 @@ class ScoreBoard extends Component {
                       <div key={index} className='score-frame'>
                         <div className='turn-score'>
                             <div className='first-turn'>
-                                { this.getTurnScore(frame[0]) }
+                                { this.getTurnScore(frame, 0) }
                             </div>
                             <div className='second-turn'>
-                                { this.getTurnScore(frame[1]) }
+                                { this.getTurnScore(frame, 1) }
                             </div>
                             { 
-                                index === 9 ? <div className='second-turn'>
-                                    { this.getTurnScore(frame[2]) }
+                                index === 9 ? <div className='third-turn'>
+                                    { this.getTurnScore(frame, 2) }
                                 </div> : null
                             }
                         </div>
